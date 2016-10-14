@@ -1,7 +1,8 @@
 package org.natuan.asynchttpclient;
 
 /**
- * 10/11/2016
+ * Created by Nguyen Anh Tuan on 15/10/2016.
+ * natuan.@gmail.com
  */
 public abstract class ResponseHandler {
     abstract public void onSuccess(HTTPResponse response);

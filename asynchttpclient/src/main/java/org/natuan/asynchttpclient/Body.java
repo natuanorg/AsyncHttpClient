@@ -6,7 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * 10/11/2016
+ * Created by Nguyen Anh Tuan on 15/10/2016.
+ * natuan.@gmail.com
  */
 public abstract class Body {
 

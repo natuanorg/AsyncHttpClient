@@ -4,7 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * 10/13/2016
+ * Created by Nguyen Anh Tuan on 15/10/2016.
+ * natuan.@gmail.com
  */
 public class User {
     @SerializedName("id")

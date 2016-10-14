@@ -9,7 +9,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 
 /**
- * 10/13/2016
+ * Created by Nguyen Anh Tuan on 15/10/2016.
+ * natuan.@gmail.com
  */
 public class JSONConverter<POJO> implements BodyEncoder<POJO>, BodyDecoder<POJO> {
 

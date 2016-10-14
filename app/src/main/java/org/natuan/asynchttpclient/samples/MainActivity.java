@@ -10,12 +10,15 @@ import org.natuan.asynchttpclient.AsyncHttpClient;
 import org.natuan.asynchttpclient.AsyncHttpClientImpl;
 import org.natuan.asynchttpclient.HTTPRequest;
 import org.natuan.asynchttpclient.JsonResponseHandler;
-import org.natuan.asynchttpclient.SSLOptions;
 import org.natuan.asynchttpclient.samples.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Nguyen Anh Tuan on 15/10/2016.
+ * natuan.@gmail.com
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";

@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 10/13/2016
+ * Created by Nguyen Anh Tuan on 15/10/2016.
+ * natuan.@gmail.com
  */
 public class BodyFactory {
 
