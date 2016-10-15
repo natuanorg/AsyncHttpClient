@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Nguyen Anh Tuan on 15/10/2016.
- * natuan.@gmail.com
+ * natuan.org@gmail.com
  */
 public class Address {
 

@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * Created by Nguyen Anh Tuan on 15/10/2016.
- * natuan.@gmail.com
+ * natuan.org@gmail.com
  */
 public class AsyncHttpClientImpl implements AsyncHttpClient{
 

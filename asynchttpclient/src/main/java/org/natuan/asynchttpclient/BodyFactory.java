@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 /**
  * Created by Nguyen Anh Tuan on 15/10/2016.
- * natuan.@gmail.com
+ * natuan.org@gmail.com
  */
 public class BodyFactory {
 

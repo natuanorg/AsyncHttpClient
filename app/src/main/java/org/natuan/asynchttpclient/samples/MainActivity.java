@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Created by Nguyen Anh Tuan on 15/10/2016.
- * natuan.@gmail.com
+ * natuan.org@gmail.com
  */
 public class MainActivity extends AppCompatActivity {
 
