@@ -1,8 +1,13 @@
 package org.natuan.asynchttpclient.samples;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -22,48 +27,63 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private TextView tvMessage;
+    private RecyclerView rvUser;
+    private ProgressBar prbLoadig;
+    private UserAdapter mUserAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tvMessage = (TextView) findViewById(R.id.tvMessage);
+        prbLoadig = (ProgressBar) findViewById(R.id.prbLoading);
+        rvUser = (RecyclerView) findViewById(R.id.rvUser);
+        rvUser.setHasFixedSize(true);
+        rvUser.setLayoutManager(new LinearLayoutManager(this));
+        mUserAdapter = new UserAdapter();
+        rvUser.setAdapter(mUserAdapter);
         try {
             HTTPRequest.Builder builder = new HTTPRequest.Builder();
             builder.setVerb(HTTPRequest.Verb.GET);
             builder.setUrl("http://jsonplaceholder.typicode.com/users");
             HTTPRequest request = builder.build();
             AsyncHttpClient client = new AsyncHttpClientImpl();
-            client.excute(request, jsonResponseHandler);
+            client.excuteAsync(request, jsonResponseHandler);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private JsonResponseHandler<List<User>, Error> jsonResponseHandler =
-            new JsonResponseHandler<List<User>, Error>(
-                    new TypeToken<ArrayList<User>>() {
-                    }.getType(),
-                    new TypeToken<Error>() {
-                    }.getType()
-            ) {
-                @Override
-                public void onSuccess(List<User> response) {
-                    Log.e(TAG, "onSuccess: ");
-                    if (response != null && response.size() > 0) {
-                        for (User user : response) {
-                            Log.e(TAG, "onSuccess: " + user.getName());
-                        }
-                    }
+        new JsonResponseHandler<List<User>, Error>(
+                new TypeToken<ArrayList<User>>() {
+                }.getType(),
+                new TypeToken<Error>() {
+                }.getType()
+        ) {
+            @Override
+            public void onSuccess(List<User> response) {
+                prbLoadig.setVisibility(View.GONE);
+                if (response != null && response.size() > 0) {
+                    mUserAdapter.updateData(response);
                 }
+            }
 
-                @Override
-                public void onFailure(Error response) {
-                    Log.e(TAG, "onFailure: " + response.toString());
-                }
+            @Override
+            public void onFailure(Error response) {
+                Log.e(TAG, "onFailure: " + response.toString());
+                prbLoadig.setVisibility(View.GONE);
+                tvMessage.setVisibility(View.VISIBLE);
+                tvMessage.setText(response.toString());
+            }
 
-                @Override
-                public void onError(Throwable error) {
-                    Log.e(TAG, "onError: " + error.getMessage(), error);
-                }
-            };
+            @Override
+            public void onError(Throwable error) {
+                Log.e(TAG, "onError: " + error.getMessage(), error);
+                prbLoadig.setVisibility(View.GONE);
+                tvMessage.setVisibility(View.VISIBLE);
+                tvMessage.setText(error.getMessage());
+            }
+        };
 }

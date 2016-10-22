@@ -35,7 +35,6 @@ public class JSONConverter<POJO> implements BodyEncoder<POJO>, BodyDecoder<POJO>
                 is.close();
             }
         }
-
         return ojb;
     }
 

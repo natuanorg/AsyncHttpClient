@@ -5,5 +5,6 @@ package org.natuan.asynchttpclient;
  * natuan.org@gmail.com
  */
 public interface AsyncHttpClient {
-    void excute(HTTPRequest request, ResponseHandler handler);
+    void excuteAsync(HTTPRequest request, ResponseHandler handler);
+    Result<HTTPResponse> excuteSync(HTTPRequest request);
 }

@@ -52,7 +52,7 @@ public class HTTPRequest {
             case DELETE:
                 return "DELETE";
             default:
-                return "";
+                throw new UnsupportedOperationException("Invalid Request Verb");
         }
     }
 

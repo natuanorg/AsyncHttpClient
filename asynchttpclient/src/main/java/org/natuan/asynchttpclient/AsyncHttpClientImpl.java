@@ -9,17 +9,31 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Nguyen Anh Tuan on 15/10/2016.
  * natuan.org@gmail.com
  */
-public class AsyncHttpClientImpl implements AsyncHttpClient{
+public class AsyncHttpClientImpl implements AsyncHttpClient {
 
     @Override
-    public void excute(HTTPRequest request, ResponseHandler handler) {
+    public void excuteAsync(HTTPRequest request, ResponseHandler handler) {
         new HTTPAsyncTask(handler)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, request);
+    }
+
+    @Override
+    public Result<HTTPResponse> excuteSync(HTTPRequest request) {
+        try {
+            return new HTTPAsyncTask(null)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, request).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public class HTTPAsyncTask extends AsyncTask<HTTPRequest, Void, Result<HTTPResponse>> {
@@ -38,7 +52,7 @@ public class AsyncHttpClientImpl implements AsyncHttpClient{
             }
         }
 
-        void setRequestHeaders(@NonNull HttpURLConnection con,@NonNull HTTPRequest request) {
+        void setRequestHeaders(@NonNull HttpURLConnection con, @NonNull HTTPRequest request) {
             for (Header header : request.mHeader) {
                 con.addRequestProperty(header.getName(), header.getValue());
             }
@@ -103,18 +117,19 @@ public class AsyncHttpClientImpl implements AsyncHttpClient{
                     conn.disconnect();
                 }
             }
-
             return response;
         }
 
         @Override
         protected void onPostExecute(Result<HTTPResponse> result) {
-            if (result.error != null) {
-                mHandler.onError(result.error);
-            } else if (result.obj.mResponseCode == HttpURLConnection.HTTP_OK) {
-                mHandler.onSuccess(result.obj);
-            } else {
-                mHandler.onFailure(result.obj);
+            if (mHandler != null) {
+                if (result.error != null) {
+                    mHandler.onError(result.error);
+                } else if (result.obj.mResponseCode == HttpURLConnection.HTTP_OK) {
+                    mHandler.onSuccess(result.obj);
+                } else {
+                    mHandler.onFailure(result.obj);
+                }
             }
         }
     }

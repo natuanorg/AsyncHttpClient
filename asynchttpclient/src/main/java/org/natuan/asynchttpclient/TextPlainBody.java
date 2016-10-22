@@ -16,8 +16,6 @@ public class TextPlainBody extends Body {
         super(mMineType);
     }
 
-
-
     @Override
     void consume(InputStream inputStream) throws IOException {
         byte[] content = read(inputStream);

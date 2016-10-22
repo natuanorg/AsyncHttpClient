@@ -27,7 +27,6 @@ public abstract class Body {
 
     protected byte[] read(InputStream is) throws IOException {
         byte[] result = null;
-        int readBytes = 0;
         try {
             if (is != null) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -35,7 +34,6 @@ public abstract class Body {
                 int rc = 0;
                 while ((rc = is.read(buffer)) > 0) {
                     baos.write(buffer, 0, rc);
-                    readBytes += rc;
                 }
                 result = baos.toByteArray();
             }
