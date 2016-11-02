@@ -6,4 +6,5 @@ package org.natuan.asynchttpclient;
  */
 public interface BodyDecoder<T> {
     T decode(Body body) throws Exception;
+    T decode(Body body, Class clazz) throws Exception;
 }

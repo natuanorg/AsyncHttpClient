@@ -18,6 +18,7 @@ import org.natuan.asynchttpclient.JsonResponseHandler;
 import org.natuan.asynchttpclient.samples.model.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,17 +50,20 @@ public class MainActivity extends AppCompatActivity {
             builder.setUrl("http://jsonplaceholder.typicode.com/users");
             HTTPRequest request = builder.build();
             AsyncHttpClient client = new AsyncHttpClientImpl();
-            client.excuteAsync(request, jsonResponseHandler);
+            //client.excuteAsync(request, jsonResponseHandler);
+            User[] users = (User[]) client.excuteSync(request, User[].class);
+            List<User> userList = Arrays.asList(users);
+            if (userList != null) {
+                mUserAdapter.updateData(userList);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private JsonResponseHandler<List<User>, Error> jsonResponseHandler =
-        new JsonResponseHandler<List<User>, Error>(
+    private JsonResponseHandler<List<User>> jsonResponseHandler =
+        new JsonResponseHandler<List<User>>(
                 new TypeToken<ArrayList<User>>() {
-                }.getType(),
-                new TypeToken<Error>() {
                 }.getType()
         ) {
             @Override
@@ -68,14 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 if (response != null && response.size() > 0) {
                     mUserAdapter.updateData(response);
                 }
-            }
-
-            @Override
-            public void onFailure(Error response) {
-                Log.e(TAG, "onFailure: " + response.toString());
-                prbLoadig.setVisibility(View.GONE);
-                tvMessage.setVisibility(View.VISIBLE);
-                tvMessage.setText(response.toString());
             }
 
             @Override

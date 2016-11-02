@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Nguyen Anh Tuan on 15/10/2016.
  * natuan.org@gmail.com
  */
-public class AsyncHttpClientImpl implements AsyncHttpClient {
+public class AsyncHttpClientImpl<T> implements AsyncHttpClient {
 
     @Override
     public void excuteAsync(HTTPRequest request, ResponseHandler handler) {
@@ -24,10 +24,14 @@ public class AsyncHttpClientImpl implements AsyncHttpClient {
     }
 
     @Override
-    public Result<HTTPResponse> excuteSync(HTTPRequest request) {
+    public T excuteSync(HTTPRequest request, Class clazz) {
         try {
-            return new HTTPAsyncTask(null)
+            Result<HTTPResponse> result = new HTTPAsyncTask()
                     .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, request).get();
+            if (result != null && result.getObj() != null) {
+                HTTPResponse response = result.getObj();
+                return new JsonResponseConverter<T>().convert(response, clazz);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -38,11 +42,13 @@ public class AsyncHttpClientImpl implements AsyncHttpClient {
 
     public class HTTPAsyncTask extends AsyncTask<HTTPRequest, Void, Result<HTTPResponse>> {
 
-        final ResponseHandler mHandler;
+        private ResponseHandler mHandler;
 
         public HTTPAsyncTask(ResponseHandler mHandler) {
             this.mHandler = mHandler;
         }
+
+        public HTTPAsyncTask() {}
 
         void fillHeaders(Map<String, List<String>> headers, HTTPResponse.Builder builder) {
             for (String name : headers.keySet()) {
@@ -127,8 +133,6 @@ public class AsyncHttpClientImpl implements AsyncHttpClient {
                     mHandler.onError(result.error);
                 } else if (result.obj.mResponseCode == HttpURLConnection.HTTP_OK) {
                     mHandler.onSuccess(result.obj);
-                } else {
-                    mHandler.onFailure(result.obj);
                 }
             }
         }
